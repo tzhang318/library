@@ -1,0 +1,29 @@
+{
+  "name": "library",
+  "version": "1.0.0",
+  "description": "learn graphQL (apollo client, apollo server) and save data in mongo",
+  "main": "client/index.js",
+  "main-server": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tzhang318/library.git"
+  },
+  "keywords": [
+    "library",
+    "graphQL",
+    "mongo",
+    "apollo",
+    "client",
+    "apollo",
+    "server"
+  ],
+  "author": "Tim Zhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tzhang318/library/issues"
+  },
+  "homepage": "https://github.com/tzhang318/library#readme"
+}

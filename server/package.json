@@ -1,0 +1,19 @@
+{
+  "name": "graphql-apollo",
+  "version": "1.0.0",
+  "description": "learning graphQL and apollo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Zhang",
+  "license": "MIT",
+  "dependencies": {
+    "@apollo/server": "^4.6.0",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.4",
+    "mongoose-unique-validator": "^4.0.0"
+  }
+}
