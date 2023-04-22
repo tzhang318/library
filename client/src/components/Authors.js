@@ -1,9 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { ALL_AUTHORS } from '../queries/queries';
 import { UpdateAuthor } from '../forms/UpdateAuthor';
+import { useGetToken } from '../hooks/useGetToken';
 
-const Authors = (props) => {
+export const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS);
+  const token = useGetToken();
   if (result.loading) {
     return (
       <div> Loading data for authors</div>
@@ -30,10 +32,12 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h2>Set Birth Year</h2>
-      <UpdateAuthor authors={authors}/>
+      {token &&
+        <div>
+          <h2>Set Birth Year</h2>
+          <UpdateAuthor authors={authors}/>
+        </div>
+      }
     </div>
   )
-}
-
-export default Authors
+};

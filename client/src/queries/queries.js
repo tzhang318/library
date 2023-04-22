@@ -33,6 +33,39 @@ export const ALL_BOOKS = gql`
   }
 `;
 
+export const BOOKS_BY_GENRE = gql`
+  query getBooksByGenre (
+    $genre: String
+  ){
+    booksByGenre(
+      genre: $genre
+    ) {
+      ${BOOK}
+    }
+  }
+`;
+
+export const RECOMMENDED_BOOKS = gql`
+  query {
+    recommendation {
+      ${BOOK}
+    }
+  }
+`;
+
+export const USER_INFO = gql`
+  query getUserInfo (
+    $username: String
+  ){
+    me(
+      username: $username
+    ) {
+      username
+      favoriteGenre
+    }
+  }
+`;
+
 export const ADD_BOOK = gql`
   mutation addNewBook(
     $title: String!
@@ -82,12 +115,21 @@ export const CREATE_USER = gql`
 `;
 
 export const LOGIN = gql`
-  mutation {
+  mutation login(
+    $username: String!
+    $password: String!
+  ) {
     login (
-      username: "mluukkai"
-      password: "secret"
+      username: $username
+      password: $password
     ) {
-      value
+      token {
+        value
+      }
+      user {
+        username
+        favoriteGenre
+      }
     }
   }
 `;

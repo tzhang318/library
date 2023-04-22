@@ -1,37 +1,57 @@
+import { useState, useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { ALL_BOOKS } from '../queries/queries';
+import { ALL_BOOKS, BOOKS_BY_GENRE } from '../queries/queries';
+import { BooksTable } from './BooksTable';
 
-const Books = (props) => {
+export const Books = (props) => {
   const result = useQuery(ALL_BOOKS);
-  if (result.loading) {
-    return (
-      <div>Loading books data</div>
-    )
-  }
-  const books = result.data.allBooks;
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [genres, setGenres] = useState([]);
+  const allBooks = result.data?.allBooks;
+  const selectBookResult = useQuery(BOOKS_BY_GENRE, {
+    variables: {
+      genre: selectedGenre
+    }
+  });
+  const books = selectedGenre ? selectBookResult.data?.booksByGenre : allBooks;
+
+  useMemo(()=> {
+    if (allBooks) {
+      setGenres(allBooks.reduce((acc, curr) =>
+        [...new Set([...curr.genres, ...acc])], []));
+    }
+  }, [allBooks]);
+
+  const handleClick = genre => {
+    setSelectedGenre(genre);
+  };
 
   return (
     <div>
       <h2>books</h2>
-
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((b) => (
-            <tr key={b.id} style={{ paddingBottom: '0.5rem' }}>
-              <td style={{ paddingRight: '1rem' }}>{b.title}</td>
-              <td style={{ paddingRight: '1rem' }}>{b.author.name}</td>
-              <td style={{ paddingRight: '1rem' }}>{b.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {(result.loading || selectBookResult.loading) &&
+        <div>Loading books data</div>
+      }
+      {(result.data && selectBookResult.data) && (
+        <BooksTable books={books} />
+      )}
+      <div>
+        {selectedGenre && (
+          <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'flex-start' }}>
+            <button style={{marginRight: '2rem', height: '100%'}} onClick={()=> setSelectedGenre(null)}>
+              Clear selection
+            </button>
+            <label style={{ fontWeight: 'bold' }}>{`selected genre: ${selectedGenre}`}</label>
+          </div>
+        )}
+        {genres.map(genre=>(
+          <button
+            key={genre}
+            style={{ marginRight: '1rem' }}
+            onClick={()=>handleClick(genre)}
+          >{genre}</button>
+        ))}
+      </div>
     </div>
   )
-}
-
-export default Books
+};
