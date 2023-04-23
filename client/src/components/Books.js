@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
-import { ALL_BOOKS, BOOKS_BY_GENRE } from '../queries/queries';
+import { toast } from 'react-toastify';
+import { useQuery, useApolloClient, useSubscription } from '@apollo/client';
+import { ALL_BOOKS, BOOKS_BY_GENRE, BOOK_ADDED } from '../queries/queries';
 import { BooksTable } from './BooksTable';
+import { updateCache } from '../utils/updateCache';
 
 export const Books = (props) => {
   const result = useQuery(ALL_BOOKS);
@@ -21,6 +23,25 @@ export const Books = (props) => {
         [...new Set([...curr.genres, ...acc])], []));
     }
   }, [allBooks]);
+
+  const client = useApolloClient();
+  useSubscription(BOOK_ADDED, {
+    shouldResubscribe: true,
+    onComplete: () => {
+      console.log('sub completed!')
+    },
+    onError: (e) => {
+      console.log('subscription error: ', e);
+    },
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded;
+      toast.success(`${addedBook.title} added`, {
+        position: toast.POSITION.TOP_CENTER
+      });
+
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
+    }
+  })
 
   const handleClick = genre => {
     setSelectedGenre(genre);

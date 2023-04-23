@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { useApolloClient, useSubscription } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { Authors } from './components/Authors';
 import { Books } from './components/Books';
 import { NewBook } from './components/NewBook';
@@ -9,31 +9,11 @@ import { LoginForm } from './forms/LoginForm';
 import { Home } from './components/Home';
 import { useGetToken } from './hooks/useGetToken';
 import { Recommendations } from './components/Recommendations';
-import { BOOK_ADDED, ALL_BOOKS } from './queries/queries';
-import { updateCache } from './utils/updateCache';
 
 const App = () => {
   const [token, setToken] = useState(useGetToken());
   const client = useApolloClient();
   const navigate = useNavigate();
-
-  useSubscription(BOOK_ADDED, {
-    shouldResubscribe: true,
-    onComplete: () => {
-      console.log('sub completed!')
-    },
-    onError: (e) => {
-      console.log('subscription error: ', e);
-    },
-    onData: ({ data }) => {
-      const addedBook = data.data.bookAdded;
-      toast.success(`${addedBook.title} added`, {
-        position: toast.POSITION.TOP_CENTER
-      });
-
-      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
-    }
-  })
 
   const logout = () => {
     setToken(null);
