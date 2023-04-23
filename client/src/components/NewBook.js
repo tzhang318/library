@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries/queries';
+import { ADD_BOOK, ALL_BOOKS } from '../queries/queries';
+import { updateCache } from '../utils/updateCache';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 export const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -10,18 +13,13 @@ export const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [addNewBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS}, { query: ALL_AUTHORS }],
     onError: e => {
       const errors = e.graphQLErrors[0]
       const { message } = errors;
       console.log(message);
     },
     update: (cache, response) => {
-      cache.updateQuery({ query: ALL_BOOKS}, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook)
-        };
-      })
+      updateCache(cache, { query: ALL_BOOKS }, response.data.bookAdded);
     }
   });
 

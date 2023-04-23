@@ -26,6 +26,7 @@ export const UpdateAuthor = props => {
       const error = result.errors[0].message;
       console.log(error);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result.data?.editAuthor]);
 
   return (

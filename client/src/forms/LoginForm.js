@@ -25,6 +25,7 @@ export const LoginForm = props => {
       localStorage.setItem('favorite-genre', result.data.login.user.favoriteGenre);
       navigate('/books');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result.data]);
 
   return (
