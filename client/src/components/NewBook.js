@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { ADD_BOOK, ALL_BOOKS } from '../queries/queries';
 import { updateCache } from '../utils/updateCache';
@@ -16,10 +17,17 @@ export const NewBook = (props) => {
     onError: e => {
       const errors = e.graphQLErrors[0]
       const { message } = errors;
-      console.log(message);
+      toast.error(message, {
+        position: toast.POSITION.TOP_CENTER
+      })
     },
     update: (cache, response) => {
       updateCache(cache, { query: ALL_BOOKS }, response.data.bookAdded);
+    },
+    onCompleted: () => {
+      toast.success(`${title} is added to library`, {
+        position: toast.POSITION.TOP_CENTER
+      });
     }
   });
 
