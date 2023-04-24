@@ -42,7 +42,13 @@ const resolvers = {
       const authors = args.author ?
         await Author.find({ name: args.name }) :
         await Author.find({});
-      return authors;
+      const books = await Book.find({});
+      const mapped = authors.map(a=>{
+        const myBooks = books.filter(b=>b.author._id.toHexString() === a.id);
+        a.bookCount = myBooks.length;
+        return a;
+      });
+      return mapped;
     },
     me: async (root, args) => User.findOne({ username: args.username })
   },
