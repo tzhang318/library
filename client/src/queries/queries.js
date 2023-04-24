@@ -13,6 +13,7 @@ const BOOK = `
     genres
     author {
       name
+      id
     }
   id
 `;

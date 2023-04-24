@@ -59,8 +59,13 @@ const resolvers = {
           }
         })
       }
-      const author = await Author.findOne({ name: args.author });
+      let author = await Author.findOne({ name: args.author })
+      if (!author) {
+        author = new Author( { name: args.author });
+        author = await author.save();
+      }
       const book = new Book({ ...args, author });
+      console.log(' *********** book to be saved: ', book);
       const saved = await book.save();
 
       pubsub.publish('BOOK_ADDED', { bookAdded: saved })

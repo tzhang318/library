@@ -11,7 +11,7 @@ const typeDefs = `
     born: Int
     bookCount: Int
     allBooks: [Book]!
-    id: String!
+    id: ID!
   }
   type User {
     username: String!

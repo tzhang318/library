@@ -28,6 +28,11 @@ export const NewBook = (props) => {
       toast.success(`${title} is added to library`, {
         position: toast.POSITION.TOP_CENTER
       });
+      setTitle('');
+      setPublished('');
+      setAuthor('');
+      setGenres([]);
+      setGenre('');
     }
   });
 
@@ -38,11 +43,6 @@ export const NewBook = (props) => {
         title, author, genres, published: Number(published)
       }
     });
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
   }
 
   const addGenre = () => {
