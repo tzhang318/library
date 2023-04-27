@@ -9,6 +9,7 @@ import { LoginForm } from './forms/LoginForm';
 import { Home } from './components/Home';
 import { useGetToken } from './hooks/useGetToken';
 import { Recommendations } from './components/Recommendations';
+import Game from './ticTacToe/TicTacToe';
 
 const App = () => {
   const [token, setToken] = useState(useGetToken());
@@ -31,6 +32,7 @@ const App = () => {
         {token && <Link to='add' style={{ paddingRight: '1rem'}}>add book</Link>}
         {token && <Link to='recommend'>recommend</Link>}
         {token && <button style={{ position: 'absolute', right: '5rem' }} onClick={logout}>logout</button>}
+        <Link to='/tic' >Game</Link>
       </div>
 
       <ToastContainer autoClose={8000} />
@@ -42,6 +44,7 @@ const App = () => {
         <Route path='/add' element={<NewBook />} />
         <Route path='/recommend' element={<Recommendations />} />
         <Route path='/' element={<Home />} />
+        <Route path='/tic' element={<Game />} />
       </Routes>
     </div>
   );
